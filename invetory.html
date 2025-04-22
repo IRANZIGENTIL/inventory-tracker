@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Tracker</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-size: 12px;
+            background-color: palevioletred; /* Fallback color */
+            /* Attempting to use local background image - WILL LIKELY NOT WORK IN BROWSER */
+            background-image: url("D:\\gentil\\live recording\\IMG-20241105-WA0148.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Pale yellow with transparency */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 80%;
+            max-width: 960px;
+        }
+
+        header {
+            background-color: green;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: 8px 8px 0 0;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .inventory-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        .inventory-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .inventory-list li:last-child {
+            border-bottom: none;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .item-quantity {
+            color: #777;
+        }
+
+        .controls button {
+            background-color: #5cb85c; /* Green button */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .controls button:hover {
+            background-color: #4cae4c;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 15px 0;
+            background-color: #333;
+            color: #f0f0f0;
+            border-radius: 0 0 8px 8px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Classic & Incredible Enhancements */
+        body {
+            /* Subtle texture for background */
+            background-image: url("D:\\gentil\\live recording\\IMG-20241105-WA0148.jpg"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect x='0' y='0' width='4' height='4' fill='rgba(0,0,0,0.05)' /><rect x='4' y='4' width='4' height='4' fill='rgba(0,0,0,0.05)' /></svg>");
+            background-repeat: no-repeat, repeat;
+            background-size: cover, auto;
+            animation: subtleBackground 10s infinite alternate;
+        }
+
+        @keyframes subtleBackground {
+            from { background-position: center top, 0 0; }
+            to { background-position: center bottom, 8px 8px; }
+        }
+
+        .container {
+            /* Glassmorphism effect */
+            background-color: rgba(245, 245, 220, 0.6); /* Pale yellow with more transparency */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        header {
+            background: linear-gradient(to right, #008000, #00cc00); /* Gradient green */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .inventory-list li {
+            padding: 18px 0;
+            border-bottom: 1px dashed #bbb; /* Dashed line */
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .inventory-list li:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle highlight for even items */
+        }
+
+        .inventory-list li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .item-name {
+            font-style: italic;
+            color: #228B22; /* Forest green */
+        }
+
+        .controls button {
+            background: linear-gradient(to bottom, #5cb85c, #4cae4c);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+
+        footer {
+            background: linear-gradient(to left, #333, #555);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>Inventory Tracker</header>
+
+        <ul class="inventory-list" id="inventoryList">
+            </ul>
+
+        <footer>&copy; 2025 Copyright</footer>
+    </div>
+
+    <script>
+        const inventoryList = document.getElementById('inventoryList');
+        const initialInventory = [
+            { name: "Laptop", quantity: 15 },
+            { name: "Mouse", quantity: 50 },
+            { name: "Keyboard", quantity: 40 },
+            { name: "Monitor", quantity: 25 },
+            { name: "Webcam", quantity: 30 }
+        ];
+
+        function displayInventory() {
+            inventoryList.innerHTML = '';
+            initialInventory.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="item-details">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-quantity">Quantity: ${item.quantity}</span>
+                    </div>
+                    <div class="controls">
+                        <button onclick="increaseQuantity('${item.name}')">+</button>
+                        <button onclick="decreaseQuantity('${item.name}')">-</button>
+                    </div>
+                `;
+                inventoryList.appendChild(listItem);
+            });
+        }
+
+        function increaseQuantity(itemName) {
+            const item = initialInventory.find(i => i.name === itemName);
+            if (item) {
+                item.quantity++;
+                displayInventory();
+            }
+        }
+
+        function decreaseQuantity(itemName) {
+            const item = initialInventory.find(i => i.name === itemName);
+            if (item && item.quantity > 0) {
+                item.quantity--;
+                displayInventory();
+            }
+        }
+
+        // Initial display of inventory
+        displayInventory();
+    </script>
+</body>
+</html>
